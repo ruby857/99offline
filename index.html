@@ -4,29 +4,30 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 "Segoe UI",system-ui,sans-serif}
 header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px solid #333;position:sticky;top:0;background:var(--bg);z-index:5}
 h1{font-size:20px;margin:0 8px 0 0;letter-spacing:2px}h1 b{color:var(--ac)}
-input,button,select{background:var(--sf);color:var(--tx);border:1px solid #444;padding:7px 11px;font:inherit;cursor:pointer}
+input,button,select{background:var(--sf);color:var(--tx);border:1px solid #444;padding:7px 11px;font:inherit;cursor:pointer;border-radius:6px}
 input{cursor:text;min-width:220px}button:hover,.on{border-color:var(--ac)}button.p{background:var(--ac);color:#111;border-color:var(--ac);font-weight:600}
 button:focus-visible,input:focus-visible{outline:2px solid var(--ac)}
 #st{margin-left:auto;font-size:12px;color:var(--mu)}#st i{display:inline-block;width:8px;height:8px;background:var(--mu);margin-right:5px}#st.o i{background:var(--ac)}
 main{padding:16px 20px;max-width:1300px;margin:auto}h2{font-size:13px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.card{background:var(--sf);border:1px solid #333;padding:0}.card:hover{border-color:var(--ac)}.card svg{display:block;width:100%;height:80px}
+.card{background:var(--sf);border:1px solid #333;padding:0;border-radius:8px;overflow:hidden}.card:hover{border-color:var(--ac)}.card svg{display:block;width:100%;height:80px}
 .card div{padding:8px 10px}.card small{color:var(--mu)}.card .r{display:flex;gap:6px;margin-top:6px}.card .r button{padding:4px 9px}
 .card.x{opacity:.55}
 #gv{display:none;padding:16px 20px;max-width:760px;margin:auto}#gv .bar{display:flex;gap:8px;align-items:center;margin-bottom:10px}#gv .bar h2{margin:0 auto 0 0;font-size:18px;color:var(--tx);text-transform:none}
-.info{background:var(--sf);padding:10px;margin-bottom:10px;color:#ccc}#play{text-align:center}#msg{min-height:24px;margin:8px 0;color:var(--ac)}
-canvas{background:#0d0d0d;border:1px solid #444;max-width:100%}
+.info{background:var(--sf);padding:10px 12px;margin-bottom:10px;color:#ccc;border-radius:8px}#play{text-align:center}#msg{min-height:24px;margin:8px 0;color:var(--ac)}
+canvas{background:#0d0d0d;border:1px solid #444;max-width:100%;border-radius:6px}
 .b{display:inline-grid;gap:4px}.b button{width:64px;height:64px;font-size:26px;padding:0}.b .lit{background:var(--ac);color:#111}
 .t{width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;background:var(--sf2)}
-</style></head><body>
-<header><h1>99<b> OFFLINE</b></h1><input id="q" type="search" placeholder="Search title, ID or keyword" aria-label="Search"><button id="rnd">Random</button><button id="dly" class="p">Daily challenge</button><button id="set">Settings</button><span id="st"><i></i><span></span></span></header>
-<main id="home"><div class="chips" id="chips"></div><div id="rec"></div><div id="fav"></div><h2 id="ch">Catalogue</h2><div class="grid" id="cat"></div></main>
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.18)}100%{transform:scale(1)}}.pop{animation:pop .22s}.fc{display:flex;flex-direction:column;gap:8px;width:250px;margin:12px auto;padding:22px;background:#1b1b1b;border:2px solid #c6ff2e;border-radius:12px}#dr{display:none;position:fixed;top:58px;right:12px;width:280px;background:var(--sf);border:1px solid #444;border-radius:8px;padding:14px;z-index:20;text-align:left}#dr label{display:block;margin:8px 0}#dr button{margin:3px 0;width:100%}</style></head><body>
+<header><h1 id="brand" tabindex="0" role="link" style="cursor:pointer">99<b> OFFLINE</b></h1><input id="q" type="search" placeholder="Search title, ID or keyword" aria-label="Search"><button id="rnd">Random</button><button id="dly" class="p">Daily challenge</button><button id="favb">★ Favourites</button><button id="set">Settings</button><span id="st"><i></i><span></span></span></header>
+<main id="home"><div class="chips" id="chips"></div><h2 id="ch">Games</h2><div class="grid" id="cat"></div><div id="rec"></div></main><main id="favv" style="display:none"><h2>Favourites</h2><div class="grid" id="favg"></div><p id="favn" style="color:#999"></p></main><section id="sp" style="display:none;padding:16px 20px;max-width:1300px;margin:auto"><button id="sback">← Back</button><p><input id="sq" type="search" placeholder="Search games" aria-label="Search games" style="width:100%;max-width:520px;font-size:18px;padding:12px"></p><div class="chips" id="sf"></div><h2 id="sn"></h2><div class="grid" id="sr"></div></section>
 <section id="gv"><div class="bar"><h2 id="gt"></h2><span id="best"></span><button id="rs">Restart</button><button id="ex">Exit</button></div><div class="info" id="gi"></div><div id="play"></div><div id="msg" role="status"></div></section>
 <script>
 "use strict";
-const CATS=["Party & Social","Board & Strategy","Card Games","Puzzles","Arcade","Strategy","Quiz & Words","Sports & Physics","Creative"];
+const CATS=["Party Games","Board Games","Puzzle & Brain","Arcade","Quiz & Words"];
 const T="Imposter|Who's Most Likely?|Undercover|Spyfall Offline|Charades|Heads Up: Offline Edition|Two Truths and a Lie|Word Association|Categories Blitz|Secret Word|Mafia / Werewolf|Ludo|Snakes and Ladders|Checkers|Chess|Tic-Tac-Toe|Connect Four|Reversi / Othello|Dots and Boxes|Mancala|Battleship|Gomoku|Klondike Solitaire|Spider Solitaire|FreeCell|Pyramid Solitaire|Golf Solitaire|Crazy Eights|War|Memory Match|Old Maid|Go Fish|Blackjack Practice|Sudoku|Nonogram|Minesweeper|2048|Daily Word Puzzle|Anagram Solver Challenge|Word Search|Mini Crossword|KenKen|Mastermind|Lights Out|Snake|Pong|Brick Breaker|Space Defender|Asteroid Dodge|Flappy Square|Mini Platformer|Endless Runner|Falling Blocks|Whack-a-Mole|Reaction Test|Mini Tower Defense|Kingdom Grid|Tactical Duel|Tiny Roguelike|Resource Colony|Hex Conquest|Pocket Artillery|Nim|Chess Tactics|Grid Conquest|Mini Factory|Trivia Arena|Geography Challenge|Math Sprint|Spelling Bee|Typing Speed Test|Hangman|Word Ladder|Anagram Race|Vocabulary Builder|Flag Quiz|Memory Sequence|Penalty Shootout|Basketball Free Throw|Mini Golf|Pocket Bowling|Pocket Pool|Table Tennis|Top-Down Racing|Ski Slalom|Soccer Juggling|Cricket Batting|Target Archery|Pixel Painter|Pixel Art Challenge|Maze Explorer|Draw and Guess|Pocket Music Studio|Drum Pad|Fractal Explorer|Virtual Aquarium|Virtual Pet|Mini City Builder|Platformer Level Editor".split("|");
-const GAMES=T.map((t,i)=>({id:String(i+1).padStart(3,"0"),title:t,cat:Math.floor(i/11)}));
+const CM={};for(let i=1;i<=22;i++)CM[String(i).padStart(3,"0")]=i<12?0:1;["030","037","043"].forEach(i=>CM[i]=2);["045","054","055"].forEach(i=>CM[i]=3);["069","072"].forEach(i=>CM[i]=4);
+const GAMES=T.map((t,i)=>{const id=String(i+1).padStart(3,"0");return{id,title:t,cat:CM[id]??0}});
 const ids=new Set(GAMES.map(g=>g.id));if(ids.size!==99||GAMES.length!==99)console.error("Catalogue ID check failed");
 // ---------- storage ----------
 const mem={};const S={get(k,d){try{const v=localStorage.getItem("99o_"+k);return v==null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}},set(k,v){mem[k]=v;try{localStorage.setItem("99o_"+k,JSON.stringify(v))}catch(e){}}};
@@ -35,23 +36,37 @@ const IMPL={};const $=s=>document.querySelector(s);
 const info={};
 function btnBoard(el,n,cols){const b=document.createElement("div");b.className="b";b.style.gridTemplateColumns=`repeat(${cols},auto)`;const bs=[];for(let i=0;i<n;i++){const x=document.createElement("button");b.appendChild(x);bs.push(x)}el.appendChild(b);return bs}
 // 016 Tic-Tac-Toe
-info["016"]="You are X, the computer is O (unbeatable minimax). Click a square. Best = wins.";
-IMPL["016"]=(el,h)=>{const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];let B=Array(9).fill(""),over=false;
-const win=b=>{for(const l of L)if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]])return b[l[0]];return b.includes("")?null:"D"};
-const mm=(b,p)=>{const w=win(b);if(w)return w==="O"?1:w==="X"?-1:0;let best=p==="O"?-2:2,mv=-1;for(let i=0;i<9;i++)if(!b[i]){b[i]=p;const s=mm(b,p==="O"?"X":"O");b[i]="";if(p==="O"?s>best:s<best)best=s}return best};
-const bs=btnBoard(el,9,3);const draw=()=>bs.forEach((x,i)=>x.textContent=B[i]);
-const end=()=>{const w=win(B);if(w){over=true;h.msg(w==="D"?"Draw.":w+" wins!");if(w==="X")h.score(1)}return over};
-bs.forEach((x,i)=>h.on(x,"click",()=>{if(over||B[i])return;B[i]="X";if(!end()){let bi=-1,bsx=-2;for(let j=0;j<9;j++)if(!B[j]){B[j]="O";const s=mm(B,"X");B[j]="";if(s>bsx){bsx=s;bi=j}}B[bi]="O";end()}draw()}));h.msg("Your move.")};
+IMPL["016"]=(el,h)=>{const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];let B,t,over,mode=2,sc={X:0,O:0,D:0},line=null,lastI=-1;
+const win=b=>{for(const l of L)if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]])return{w:b[l[0]],l};return b.includes("")?null:{w:"D"}};
+const mm=(b,p)=>{const r=win(b);if(r)return r.w==="O"?1:r.w==="X"?-1:0;let best=p==="O"?-2:2;for(let i=0;i<9;i++)if(!b[i]){b[i]=p;const q=mm(b,p==="O"?"X":"O");b[i]="";best=p==="O"?Math.max(best,q):Math.min(best,q)}return best};
+const note=()=>h.msg(`${t} to move · X ${sc.X} – O ${sc.O} · draws ${sc.D}`);
+const init=()=>{B=Array(9).fill("");t="X";over=0;line=null;lastI=-1;note();draw()};
+const move=i=>{if(over||B[i])return;B[i]=t;lastI=i;vib(15);const r=win(B);if(r){over=1;if(r.w==="D"){sc.D++;h.msg("Draw!");vib([30,40,30])}else{sc[r.w]++;line=r.l;h.msg(`${r.w} wins! X ${sc.X} – O ${sc.O}`);vib([60,40,60,40,120]);if(r.w==="X"&&mode===1)h.score(sc.X)}}else{t=t==="X"?"O":"X";note();if(mode===1&&t==="O")h.after(ai,350)}draw()};
+const ai=()=>{let bi=-1,bs=-2;for(let j=0;j<9;j++)if(!B[j]){B[j]="O";const q=mm(B,"X");B[j]="";if(q>bs){bs=q;bi=j}}move(bi)};
+const draw=()=>{let o=`<p><button data-a="m2" class="${mode===2?"on":""}">2 players</button> <button data-a="m1" class="${mode===1?"on":""}">vs computer</button></p><div style="display:inline-grid;grid-template-columns:repeat(3,110px)">`;
+for(let i=0;i<9;i++){const r=i/3|0,c=i%3,w=line&&line.includes(i);o+=`<button data-i="${i}" aria-label="square ${i+1}" class="${i===lastI?"pop":""}" style="width:110px;height:110px;padding:0;font-size:64px;font-weight:700;background:${w?"rgba(198,255,46,.18)":"transparent"};border:0;border-radius:0;border-right:${c<2?"4px solid #555":"0"};border-bottom:${r<2?"4px solid #555":"0"};color:${B[i]==="X"?"#c6ff2e":"#eee"}">${B[i]}</button>`}
+el.innerHTML=o+`</div><p><button class="p" data-a="n">Next round</button></p>`};
+h.on(el,"click",e=>{const b=e.target.closest("button");if(!b)return;const D=b.dataset;if(D.a==="m1"||D.a==="m2"){mode=D.a==="m1"?1:2;sc={X:0,O:0,D:0};init()}else if(D.a==="n")init();else if(D.i!=null&&!(mode===1&&t==="O"))move(+D.i)});init()};
 // 045 Snake
-info["045"]="Arrow keys / WASD to steer (swipe on touch). Eat food, avoid walls and yourself. Speed rises with score.";
-IMPL["045"]=(el,h)=>{const N=20,Z=18,cv=document.createElement("canvas");cv.width=cv.height=N*Z;el.appendChild(cv);const x=cv.getContext("2d");
-let s=[{x:10,y:10}],d={x:1,y:0},nd=d,f,sc=0,dead=false,tm;const pf=()=>{do f={x:Math.random()*N|0,y:Math.random()*N|0};while(s.some(p=>p.x===f.x&&p.y===f.y))};pf();
+IMPL["045"]=(el,h)=>{const N=20,Z=24,cv=document.createElement("canvas"),bar=document.createElement("div");cv.width=cv.height=N*Z;cv.style.cssText="max-width:100%;height:auto;touch-action:none";el.append(bar,cv);const x=cv.getContext("2d");
+let s,d,nd,f,sc,st,tm,spd=S.get("snSpd",110);
+const bd=()=>{bar.innerHTML=`<p>Speed: ${[["Slow",150],["Normal",110],["Fast",75]].map(([n,v])=>`<button data-s="${v}" class="${spd===v?"on":""}">${n}</button>`).join(" ")} <button data-a="p">Pause</button></p>`};
+const pf=()=>{do f={x:Math.random()*N|0,y:Math.random()*N|0};while(s.some(p=>p.x===f.x&&p.y===f.y))};
+const init=()=>{clearInterval(tm);s=[{x:9,y:10},{x:8,y:10},{x:7,y:10}];d=nd={x:1,y:0};sc=0;st="ready";pf();bd();draw();h.msg("Press an arrow key or WASD to start (swipe on touch)")};
+const draw=()=>{for(let i=0;i<N;i++)for(let j=0;j<N;j++){x.fillStyle=(i+j)%2?"#181818":"#1e1e1e";x.fillRect(i*Z,j*Z,Z,Z)}
+x.fillStyle="#ff5c5c";x.beginPath();x.arc(f.x*Z+Z/2,f.y*Z+Z/2+1,Z/2-4,0,7);x.fill();x.fillStyle="#6a9b1f";x.fillRect(f.x*Z+Z/2-1,f.y*Z+2,2,5);
+s.forEach((p,i)=>{x.fillStyle=i?"#a6dc2b":"#c6ff2e";x.beginPath();if(x.roundRect)x.roundRect(p.x*Z+2,p.y*Z+2,Z-4,Z-4,7);else x.rect(p.x*Z+2,p.y*Z+2,Z-4,Z-4);x.fill()});
+const hd=s[0];[-1,1].forEach(q=>{const ex=hd.x*Z+Z/2+d.x*4+(d.x?0:q*4),ey=hd.y*Z+Z/2+d.y*4+(d.y?0:q*4);x.fillStyle="#fff";x.beginPath();x.arc(ex,ey,3,0,7);x.fill();x.fillStyle="#111";x.beginPath();x.arc(ex+d.x,ey+d.y,1.5,0,7);x.fill()});
+x.fillStyle="#c6ff2e";x.font="bold 14px sans-serif";x.textAlign="left";x.textBaseline="alphabetic";x.fillText(`Score ${sc}   Best ${S.get("hs_045",0)}`,6,16);
+if(st==="over"||st==="paused"){x.fillStyle="rgba(0,0,0,.65)";x.fillRect(0,0,N*Z,N*Z);x.fillStyle="#fff";x.textAlign="center";x.font="bold 30px sans-serif";x.fillText(st==="over"?"Game over":"Paused",N*Z/2,N*Z/2-8);x.font="16px sans-serif";x.fillText(st==="over"?`Score ${sc} · press Space to play again`:"Press Space to resume",N*Z/2,N*Z/2+22)}};
+const step=()=>{if(st!=="run")return;d=nd;const n={x:s[0].x+d.x,y:s[0].y+d.y};if(n.x<0||n.y<0||n.x>=N||n.y>=N||s.slice(0,-1).some(p=>p.x===n.x&&p.y===n.y)){st="over";clearInterval(tm);vib([80,50,160]);h.msg("Game over · Score "+sc);h.score(sc);draw();return}
+s.unshift(n);if(n.x===f.x&&n.y===f.y){sc++;vib(20);pf();h.msg("Score "+sc)}else s.pop();draw()};
+const run=()=>{clearInterval(tm);st="run";tm=h.every(step,spd)};
+const pause=()=>{if(st==="over")init();else if(st==="run"){st="paused";clearInterval(tm);draw()}else if(st==="paused")run()};
 const K={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};
-h.on(window,"keydown",e=>{const k=K[e.key];if(k){e.preventDefault();if(k[0]!==-d.x||k[1]!==-d.y)nd={x:k[0],y:k[1]}}});
-let t0;h.on(cv,"touchstart",e=>{t0=e.touches[0]},{passive:true});h.on(cv,"touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-t0.clientX,dy=t.clientY-t0.clientY;nd=Math.abs(dx)>Math.abs(dy)?{x:Math.sign(dx),y:0}:{x:0,y:Math.sign(dy)};if(nd.x===-d.x&&nd.y===-d.y)nd=d});
-const draw=()=>{x.fillStyle="#0d0d0d";x.fillRect(0,0,cv.width,cv.height);x.fillStyle="#c6ff2e";x.fillRect(f.x*Z+2,f.y*Z+2,Z-4,Z-4);x.fillStyle="#ddd";s.forEach(p=>x.fillRect(p.x*Z+1,p.y*Z+1,Z-2,Z-2))};
-const step=()=>{d=nd;const n={x:s[0].x+d.x,y:s[0].y+d.y};if(n.x<0||n.y<0||n.x>=N||n.y>=N||s.some(p=>p.x===n.x&&p.y===n.y)){dead=true;h.msg("Game over. Score "+sc);h.score(sc);return}s.unshift(n);if(n.x===f.x&&n.y===f.y){sc++;pf();h.msg("Score "+sc);clearInterval(tm);tm=h.every(step,Math.max(60,130-sc*3))}else s.pop();draw()};
-tm=h.every(step,130);draw();h.msg("Score 0")};
+h.on(window,"keydown",e=>{const k=K[e.key];if(k){e.preventDefault();if(st==="over")return;if(k[0]!==-d.x||k[1]!==-d.y)nd={x:k[0],y:k[1]};if(st==="ready")run()}else if(e.key===" "||e.key==="p"){e.preventDefault();pause()}});
+let t0;h.on(cv,"touchstart",e=>{t0=e.touches[0]},{passive:true});h.on(cv,"touchend",e=>{if(!t0||st==="over")return;const t=e.changedTouches[0],dx=t.clientX-t0.clientX,dy=t.clientY-t0.clientY,k=Math.abs(dx)>Math.abs(dy)?[Math.sign(dx),0]:[0,Math.sign(dy)];if(k[0]!==-d.x||k[1]!==-d.y)nd={x:k[0],y:k[1]};if(st==="ready")run()});
+h.on(bar,"click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.s){spd=+b.dataset.s;S.set("snSpd",spd);init()}else pause()});init()};
 // 037 2048
 info["037"]="Arrow keys / WASD or swipe to slide tiles. Equal tiles merge. Reach 2048 (and keep going). U = undo.";
 IMPL["037"]=(el,h)=>{let g=Array.from({length:4},()=>Array(4).fill(0)),sc=0,hist=[];const box=document.createElement("div");box.style.cssText="display:inline-grid;grid-template-columns:repeat(4,70px);gap:6px";el.appendChild(box);
@@ -67,10 +82,12 @@ const K={ArrowLeft:0,a:0,ArrowRight:1,d:1,ArrowUp:2,w:2,ArrowDown:3,s:3};
 h.on(window,"keydown",e=>{if(e.key in K){e.preventDefault();mv(K[e.key])}else if(e.key==="u"&&hist.length){const[o,s]=hist.pop();g=JSON.parse(o);sc=s;draw();h.msg("Score "+sc)}});
 let t0;h.on(box,"touchstart",e=>{t0=e.touches[0]},{passive:true});h.on(box,"touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-t0.clientX,dy=t.clientY-t0.clientY;Math.abs(dx)>Math.abs(dy)?mv(dx<0?0:1):mv(dy<0?2:3)});draw();h.msg("Score 0")};
 // 030 Memory Match
-info["030"]="Click two cards to find matching pairs. Fewer moves and less time is better (score = moves).";
-IMPL["030"]=(el,h)=>{const sy="◆●▲■★♥♣♠".split("");let c=[...sy,...sy].sort(()=>Math.random()-.5),op=[],done=new Set(),mvs=0,t0=Date.now(),lock=false;const bs=btnBoard(el,16,4);
-const draw=()=>bs.forEach((b,i)=>{b.textContent=op.includes(i)||done.has(i)?c[i]:"?";b.className=done.has(i)?"lit":""});
-bs.forEach((b,i)=>h.on(b,"click",()=>{if(lock||op.includes(i)||done.has(i))return;op.push(i);draw();if(op.length===2){mvs++;const[a,b2]=op;if(c[a]===c[b2]){done.add(a);done.add(b2);op=[];if(done.size===16){h.msg(`Cleared in ${mvs} moves, ${((Date.now()-t0)/1000)|0}s`);h.score(mvs,true)}else h.msg("Moves "+mvs)}else{lock=true;h.msg("Moves "+mvs);h.after(()=>{op=[];lock=false;draw()},700)}draw()}}));draw();h.msg("Moves 0")};
+IMPL["030"]=(el,h)=>{const SETS={Emojis:["🐶","🐱","🐸","🦊","🐼","🐵","🦁","🐙"],Letters:"ABCDEFGH".split(""),Numbers:"12345678".split(""),Shapes:["◆","●","▲","■","★","♥","♣","♠"]};let mode=S.get("memMode","Emojis"),c,op,done,mvs,t0,lock;
+const init=()=>{c=shuf([...SETS[mode],...SETS[mode]]);op=[];done=new Set();mvs=0;t0=Date.now();lock=false;h.msg("Moves 0");draw()};
+const draw=()=>{let o="<p>"+Object.keys(SETS).map(m=>`<button data-m="${m}" class="${m===mode?"on":""}">${m}</button>`).join(" ")+`</p><div style="display:inline-grid;grid-template-columns:repeat(4,76px);gap:8px">`;
+c.forEach((v,i)=>{const sh=op.includes(i)||done.has(i);o+=`<button data-i="${i}" aria-label="card" style="height:76px;font-size:32px;padding:0;background:${done.has(i)?"#2f3d12":sh?"#3a3a3a":"#2c2c2c"}">${sh?v:"?"}</button>`});el.innerHTML=o+"</div>"};
+h.on(el,"click",e=>{const B=e.target.closest("button");if(!B)return;const D=B.dataset;if(D.m){mode=D.m;S.set("memMode",mode);init();return}if(D.i==null||lock)return;const i=+D.i;if(op.includes(i)||done.has(i))return;op.push(i);vib(10);draw();
+if(op.length===2){mvs++;const[a,b]=op;if(c[a]===c[b]){done.add(a);done.add(b);op=[];vib(30);if(done.size===16){h.msg(`Cleared in ${mvs} moves, ${((Date.now()-t0)/1000)|0}s`);h.score(mvs,true);vib([60,40,120])}else h.msg("Moves "+mvs)}else{lock=true;h.msg("Moves "+mvs);h.after(()=>{op=[];lock=false;draw()},700)}draw()}});init()};
 // 055 Reaction Test
 info["055"]="Click the box when it turns lime. Clicking early is a false start. Score = best average (ms).";
 IMPL["055"]=(el,h)=>{const b=document.createElement("button");b.style.cssText="width:320px;height:200px;font-size:20px";el.appendChild(b);let st="idle",t0,to,res=[];
@@ -104,9 +121,9 @@ if(bl===4){over=true;h.msg("Cracked in "+n+" guesses!");h.score(n,true)}else if(
 el.append(cur,pal,sb,cb,hs);draw();h.msg("Guess 1 of 10")};
 // 054 Whack-a-Mole
 info["054"]="Click the lime mole when it appears. 30 seconds. Misses subtract from your score. Moles get faster.";
-IMPL["054"]=(el,h)=>{const bs=btnBoard(el,9,3);let sc=0,miss=0,t=30,m=-1;const draw=()=>bs.forEach((b,i)=>{b.className=i===m?"lit":"";b.textContent=i===m?"●":""});
+IMPL["054"]=(el,h)=>{const bs=btnBoard(el,9,3);let sc=0,miss=0,t=30,m=-1;const hm=r=>`url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><g transform="rotate(${r} 24 24)"><rect x="21" y="16" width="6" height="28" rx="2" fill="#a9733a" stroke="#222"/><rect x="8" y="6" width="32" height="14" rx="3" fill="#cfd4d9" stroke="#222" stroke-width="2"/></g></svg>`)}") 24 24, crosshair`,setc=r=>{el.style.cursor=hm(r);bs.forEach(b=>b.style.cursor=hm(r))},swing=()=>{setc(25);h.after(()=>setc(-35),120)};setc(-35);const draw=()=>bs.forEach((b,i)=>{b.className=i===m?"lit":"";b.textContent=i===m?"🐹":""});
 const upd=()=>h.msg(`Score ${sc} · Misses ${miss} · ${t}s`);
-bs.forEach((b,i)=>h.on(b,"click",()=>{if(t<=0)return;if(i===m){sc++;m=-1}else miss++;draw();upd()}));
+bs.forEach((b,i)=>h.on(b,"click",()=>{swing();if(t<=0)return;if(i===m){sc++;m=-1;vib(25)}else{miss++;vib(10)}draw();upd()}));
 h.every(()=>{if(t<=0)return;t--;if(t<=0){m=-1;draw();const f=Math.max(0,sc-miss);h.msg(`Time! Final ${f} (hits ${sc}, misses ${miss})`);h.score(f)}else upd()},1000);
 const mv=()=>{if(t<=0)return;m=Math.random()*9|0;draw();h.after(mv,Math.max(350,800-(30-t)*15))};mv();upd()};
 // 072 Hangman
@@ -136,13 +153,13 @@ h.on(el,"click",e=>{const a=e.target.dataset&&e.target.dataset.l;if(!a)return;if
 if(a==="go"){go(Array.from({length:n},(_,j)=>(names[j]||"").trim()||"Player "+(j+1)),Math.min(k,Math.max(1,(n-1)>>1)));return}show()});return{show}}
 // 001 Imposter
 info["001"]="3–12 players share one device. Crew see the same secret word; imposters see none. Everyone views their role privately, gives one clue each, then votes (privately). Highest vote is eliminated (ties: nobody). Crew win when all imposters are out; imposters win when they equal the crew.";
-IMPL["001"]=(el,h)=>{const WD="Pizza,Volcano,Library,Bicycle,Piano,Rainbow,Castle,Submarine,Basketball,Telescope,Pyramid,Lighthouse,Backpack,Campfire,Skateboard,Museum,Compass,Umbrella,Glacier,Orchestra".split(",");
-let P=[],word,st="setup",i=0,shown=false,A=[],vi=0,vshown=false,tally,rt="",over=false,starter="";
+IMPL["001"]=(el,h)=>{const WD=[["Pizza","cheese"],["Volcano","lava"],["Library","quiet"],["Bicycle","wheels"],["Piano","keys"],["Rainbow","colours"],["Castle","king"],["Submarine","underwater"],["Basketball","hoop"],["Telescope","stars"],["Pyramid","Egypt"],["Lighthouse","ships"],["Backpack","school"],["Campfire","marshmallow"],["Skateboard","tricks"],["Museum","exhibits"],["Compass","north"],["Umbrella","rain"],["Glacier","ice"],["Orchestra","conductor"]];
+let P=[],word,hint,st="setup",i=0,shown=false,A=[],vi=0,vshown=false,tally,rt="",over=false,starter="";
 const imp=()=>P.filter(p=>p.alive&&p.imp).length,crew=()=>P.filter(p=>p.alive&&!p.imp).length;
 const pick=()=>{const a=P.filter(p=>p.alive);starter=a[Math.random()*a.length|0].name};
-const L=lobby(el,h,3,12,true,(nm,k)=>{P=nm.map(name=>({name,imp:false,alive:true}));[...P.keys()].sort(()=>Math.random()-.5).slice(0,k).forEach(j=>P[j].imp=true);word=WD[Math.random()*WD.length|0];st="pass";i=0;shown=false;over=false;draw()});
+const L=lobby(el,h,3,12,true,(nm,k)=>{P=nm.map(name=>({name,imp:false,alive:true}));[...P.keys()].sort(()=>Math.random()-.5).slice(0,k).forEach(j=>P[j].imp=true);[word,hint]=WD[Math.random()*WD.length|0];st="pass";i=0;shown=false;over=false;draw()});
 const draw=()=>{let o="";const pl=P[i];
-if(st==="pass")o=shown?`<h2>${esc(pl.name)}</h2>`+(pl.imp?`<p style="font-size:24px;color:#c6ff2e">You are the IMPOSTER</p><p>You do not know the word. Blend in.</p>`:`<p>The secret word is</p><p style="font-size:34px;color:#c6ff2e">${esc(word)}</p>`)+`<button class="p" data-a="hide">Hide and pass on</button>`:`<h2>Pass the device to ${esc(pl.name)}</h2><button class="p" data-a="show">I am ${esc(pl.name)}: show my role</button>`;
+if(st==="pass")o=shown?`<h2>${esc(pl.name)}</h2>`+(pl.imp?`<div class="fc"><small>YOU ARE THE</small><b style="color:#ff6b6b;font-size:30px">IMPOSTER</b><hr style="width:100%;border:0;border-top:1px solid #444"><small>Your hint word</small><b style="font-size:30px;color:#c6ff2e">${esc(hint)}</b><small>Blend in. Do not give yourself away.</small></div>`:`<div class="fc"><small>SECRET WORD</small><b style="font-size:34px;color:#c6ff2e">${esc(word)}</b><small>Give a clue without saying it.</small></div>`)+`<button class="p" data-a="hide">Hide and pass on</button>`:`<h2>Pass the device to ${esc(pl.name)}</h2><button class="p" data-a="show">I am ${esc(pl.name)}: show my role</button>`;
 if(st==="discuss")o=`<h2>Discussion</h2><p>Alive: ${P.filter(p=>p.alive).map(p=>esc(p.name)).join(", ")}</p><p>Imposters left: ${imp()} · Crew: ${crew()}</p><p>${esc(starter)} starts. Each player gives one clue about the word.</p><button class="p" data-a="vote">Start voting</button>`;
 if(st==="vote"){const v=A[vi];o=vshown?`<h2>${esc(v.name)}: who is the imposter?</h2>`+A.filter(p=>p!==v).map(p=>`<button data-a="cast" data-t="${P.indexOf(p)}">${esc(p.name)}</button>`).join(" "):`<h2>Pass the device to ${esc(v.name)}</h2><button class="p" data-a="ready">Ready to vote privately</button>`}
 if(st==="result")o=`<h2>${esc(rt)}</h2>`+(over?`<p>The word was <b>${esc(word)}</b>. Imposters: ${P.filter(p=>p.imp).map(p=>esc(p.name)).join(", ")}</p><button class="p" data-a="again">Play again</button>`:`<button class="p" data-a="next">Next round</button>`);
@@ -280,7 +297,7 @@ info["012"]="2–4 players (2 players use Red and Yellow). Roll the die: a 6 bri
 IMPL["012"]=(el,h)=>{const Z=40,CO=["#d33","#3a3","#ec3","#35c"],CN=["Red","Green","Yellow","Blue"],ST=[0,13,26,39],SAFE=new Set([0,8,13,21,26,34,39,47]),FIN=56,BO=[[0,0],[0,9],[9,9],[9,0]],SL=[[2,2],[4,2],[2,4],[4,4]],A=[];
 const add=(r,c)=>A.push([r,c]);for(let c=1;c<=5;c++)add(6,c);for(let r=5;r>=0;r--)add(r,6);add(0,7);add(0,8);for(let r=1;r<=5;r++)add(r,8);for(let c=9;c<=14;c++)add(6,c);add(7,14);add(8,14);for(let c=13;c>=9;c--)add(8,c);for(let r=9;r<=14;r++)add(r,8);add(14,7);add(14,6);for(let r=13;r>=9;r--)add(r,6);for(let c=5;c>=0;c--)add(8,c);add(7,0);add(6,0);
 const rot=(r,c,k)=>{for(let i=0;i<k;i++)[r,c]=[c,14-r];return[r,c]};
-let N,S,P,t,d=0,ld=0,lg=[],over=0,L,TK=[];
+let N,S,P,t,d=0,ld=0,lg=[],over=0,L,TK=[],rl=0;
 const cv=document.createElement("canvas"),ctl=document.createElement("div");cv.width=cv.height=15*Z;cv.style.cssText="max-width:100%;height:auto;background:#f2f2f2;cursor:pointer";const x=cv.getContext("2d");
 const g=(j,p)=>(ST[S[j]]+p)%52,legal=(j,r)=>[0,1,2,3].filter(i=>{const p=P[j][i];return p<0?r===6:p<FIN&&p+r<=FIN});
 const sq=(r,c,f)=>{x.fillStyle=f;x.fillRect(c*Z,r*Z,Z,Z);x.strokeStyle="#555";x.lineWidth=1;x.strokeRect(c*Z+.5,r*Z+.5,Z,Z)};
@@ -297,12 +314,12 @@ TK=[];P.forEach((a,j)=>a.forEach((_,i)=>TK.push({j,i,...pos(j,i)})));const G={};
 TK.forEach(o=>{let r=14,ox=0,oy=0;if(o.k&&G[o.k].length>1){const n=G[o.k].indexOf(o);r=9;ox=n%2?7:-7;oy=n%4<2?-7:7}o.px=o.x+ox;o.py=o.y+oy;
 if(!over&&d&&o.j===t&&lg.includes(o.i)){x.beginPath();x.arc(o.px,o.py,r+5,0,7);x.lineWidth=3;x.strokeStyle="#111";x.stroke();x.lineWidth=1.5;x.strokeStyle="#c6ff2e";x.stroke()}
 x.beginPath();x.arc(o.px,o.py,r,0,7);x.fillStyle=CO[S[o.j]];x.fill();x.lineWidth=2;x.strokeStyle="#111";x.stroke();x.beginPath();x.arc(o.px-r/3,o.py-r/3,r/4,0,7);x.fillStyle="rgba(255,255,255,.6)";x.fill()});
-ctl.innerHTML=`<p><span style="display:inline-block;width:14px;height:14px;background:${CO[S[t]]}"></span> <b>${esc(N[t])}</b> (${CN[S[t]]}) ${over?"wins!":"to move"} &nbsp;<span style="display:inline-block;width:52px;height:52px;line-height:52px;font-size:30px;background:#f2f2f2;color:#111;border-radius:8px;vertical-align:middle">${ld||"–"}</span> &nbsp;${over?'<button class="p" data-a="g">Play again</button>':d?"Click a highlighted token":'<button class="p" data-a="r">Roll die</button>'}</p>`};
+ctl.innerHTML=`<p><span style="display:inline-block;width:14px;height:14px;background:${CO[S[t]]}"></span> <b>${esc(N[t])}</b> (${CN[S[t]]}) ${over?"wins!":"to move"} &nbsp;${dieHTML(ld)} &nbsp;${over?'<button class="p" data-a="g">Play again</button>':d?"Click a highlighted token":'<button class="p" data-a="r">Roll die</button>'}</p>`};
 const next=()=>{if(d!==6)t=(t+1)%N.length;d=0;lg=[]};
 const mv=i=>{const p=P[t][i],np=p<0?0:p+d;P[t][i]=np;if(np<=50){const k=g(t,np);if(!SAFE.has(k))P.forEach((a,j)=>{if(j!==t)a.forEach((q,y)=>{if(q>=0&&q<=50&&g(j,q)===k){a[y]=-1;h.msg(`${N[t]} captured one of ${N[j]}'s tokens!`)}})})}
 if(P[t].every(q=>q===FIN)){over=1;h.msg(`${N[t]} wins!`)}else next();draw()};
 L=lobby(el,h,2,4,false,nm=>{N=nm;S=nm.length===2?[0,2]:[0,1,2,3].slice(0,nm.length);P=N.map(()=>[-1,-1,-1,-1]);t=0;d=0;ld=0;over=0;lg=[];el.innerHTML="";el.append(cv,ctl);h.msg("");draw()});
-h.on(ctl,"click",e=>{const a=e.target.dataset&&e.target.dataset.a;if(a==="r"&&!d&&!over){d=ld=1+(Math.random()*6|0);lg=legal(t,d);if(!lg.length){h.msg(`${N[t]} rolled ${d}: no legal move.`);next()}else h.msg("");draw()}else if(a==="g")L.show()});
+h.on(ctl,"click",e=>{const a=e.target.dataset&&e.target.dataset.a;if(a==="r"&&!d&&!over&&!rl){rl=1;vib(30);let n=0;const iv=h.every(()=>{ld=1+(Math.random()*6|0);draw();if(++n>7){clearInterval(iv);rl=0;d=ld;vib([40,30,80]);lg=legal(t,d);if(!lg.length){h.msg(`${N[t]} rolled ${d}: no legal move.`);next()}else h.msg("");draw()}},75)}else if(a==="g")L.show()});
 h.on(cv,"click",e=>{if(over||!d)return;const rc=cv.getBoundingClientRect(),k=cv.width/rc.width,px=(e.clientX-rc.left)*k,py=(e.clientY-rc.top)*k;const o=TK.find(o=>o.j===t&&lg.includes(o.i)&&Math.hypot(o.px-px,o.py-py)<20);if(o)mv(o.i)});L.show()};
 // 013 Snakes and Ladders (canvas board)
 info["013"]="2–4 players race from the start to square 100. Roll the die and move. Ladders lift you up; snakes slide you down to their tail. A roll of 6 gives an extra turn. 'Exact finish' (toggle before the first roll) means you must land exactly on 100 or stay put; when off, any overshoot wins.";
@@ -316,7 +333,7 @@ Object.entries(SN).forEach(([a,b],i)=>{const[x1,y1]=ctr(+a),[x2,y2]=ctr(b),mx=(x
 x.beginPath();x.arc(x1,y1,9,0,7);x.fillStyle=SC[i];x.fill();x.fillStyle="#fff";x.beginPath();x.arc(x1-3,y1-2,2.3,0,7);x.arc(x1+3,y1-2,2.3,0,7);x.fill();x.fillStyle="#111";x.beginPath();x.arc(x1-3,y1-2,1,0,7);x.arc(x1+3,y1-2,1,0,7);x.fill()});
 x.fillStyle="#999";x.textAlign="center";x.textBaseline="middle";x.font="12px sans-serif";x.fillText("START",30,10*Z+17);
 N.forEach((_,j)=>{const[cx,cy]=pos[j]?ctr(pos[j]):[80+j*34,10*Z+17],ox=pos[j]?(j%2?10:-10):0,oy=pos[j]?(j<2?-10:10):0;x.beginPath();x.arc(cx+ox,cy+oy,pos[j]?9:11,0,7);x.fillStyle=CL[j];x.fill();x.lineWidth=2;x.strokeStyle="#111";x.stroke()});
-ctl.innerHTML=`<p><span style="display:inline-block;width:14px;height:14px;background:${CL[t]}"></span> <b>${esc(N[t])}</b> ${over?"wins!":"to move"} &nbsp;<span style="display:inline-block;width:52px;height:52px;line-height:52px;font-size:30px;background:#f2f2f2;color:#111;border-radius:8px;vertical-align:middle">${ld||"–"}</span> &nbsp;${over?'<button class="p" data-a="g">Play again</button>':`<button class="p" data-a="r">Roll die</button> <button data-a="e" ${rolled?"disabled":""}>Exact finish: ${ex?"on":"off"}</button>`}</p>`};
+ctl.innerHTML=`<p><span style="display:inline-block;width:14px;height:14px;background:${CL[t]}"></span> <b>${esc(N[t])}</b> ${over?"wins!":"to move"} &nbsp;${dieHTML(ld)} &nbsp;${over?'<button class="p" data-a="g">Play again</button>':`<button class="p" data-a="r">Roll die</button> <button data-a="e" ${rolled?"disabled":""}>Exact finish: ${ex?"on":"off"}</button>`}</p>`};
 L=lobby(el,h,2,4,false,nm=>{N=nm;pos=N.map(()=>0);t=0;rolled=0;over=0;ld=0;el.innerHTML="";el.append(cv,ctl);h.msg("");draw()});
 h.on(ctl,"click",e=>{const a=e.target.dataset&&e.target.dataset.a;if(!a)return;
 if(a==="e"&&!rolled)ex=!ex;
@@ -326,7 +343,7 @@ if(n===100){over=1;m+=". Finished!"}else if(d===6)m+=". Extra turn!";else t=(t+1
 else if(a==="g"){L.show();return}
 draw()});L.show()};
 // 014 Checkers
-info["014"]="Red (bottom) moves first. Pieces move diagonally forward one square; captures are mandatory and multi-jumps are enforced as one move. Reaching the far row makes a king, which moves and jumps both ways. Select a piece, then a highlighted square. You win when the opponent has no pieces or no legal moves. Mode: vs computer (Grey) or two players.";
+info["014"]="Red (bottom) moves first. Pieces move diagonally forward one square; captures are mandatory and multi-jumps are enforced as one move. Reaching the far row makes a king, which moves and jumps both ways. Select a piece, then a highlighted square. You win when the opponent has no pieces or no legal moves. Mode: vs computer (Black) or two players.";
 IMPL["014"]=(el,h)=>{let b,turn,sel,mvs,mode=1,over=0;const IN=(r,c)=>r>=0&&r<8&&c>=0&&c<8,dirs=v=>Math.abs(v)===2?[[1,1],[1,-1],[-1,1],[-1,-1]]:v>0?[[-1,1],[-1,-1]]:[[1,1],[1,-1]];
 const king=(v,r)=>Math.abs(v)===1&&(v>0?r===0:r===7);
 const jumps=(r0,c0,r,c,v,caps,path,out)=>{let f=0;for(const[dr,dc]of dirs(v)){const mr=r+dr,mc=c+dc,tr=r+2*dr,tc=c+2*dc;if(!IN(tr,tc)||caps.some(x=>x[0]===mr&&x[1]===mc))continue;
@@ -334,11 +351,11 @@ if(b[mr][mc]*v<0&&(b[tr][tc]===0||(tr===r0&&tc===c0))){f=1;const nc=[...caps,[mr
 const legal=p=>{const J=[],S=[];for(let r=0;r<8;r++)for(let c=0;c<8;c++){const v=b[r][c];if(v*p<=0)continue;jumps(r,c,r,c,v,[],[],J);for(const[dr,dc]of dirs(v)){const tr=r+dr,tc=c+dc;if(IN(tr,tc)&&b[tr][tc]===0)S.push({from:[r,c],path:[[tr,tc]],caps:[]})}}return J.length?J:S};
 const apply=m=>{const[r,c]=m.from,v=b[r][c];b[r][c]=0;m.caps.forEach(([x,y])=>b[x][y]=0);const[tr,tc]=m.path[m.path.length-1];b[tr][tc]=king(v,tr)?v*2:v};
 const init=()=>{b=Array.from({length:8},(_,r)=>Array.from({length:8},(_,c)=>(r+c)%2?(r<3?-1:r>4?1:0):0));turn=1;sel=null;over=0;mvs=legal(1);note()};
-const note=()=>{h.msg((turn>0?"Red":"Grey")+" to move"+(mvs[0]&&mvs[0].caps.length?" (capture required)":""))};
-const after=()=>{turn=-turn;sel=null;mvs=legal(turn);if(!mvs.length){over=1;const w=turn>0?"Grey":"Red";h.msg(w+" wins!");if(w==="Red"&&mode===1)h.score(1)}else{note();if(mode===1&&turn===-1)h.after(()=>{const m=mvs,mx=Math.max(...m.map(x=>x.caps.length)),c=m.filter(x=>x.caps.length===mx);apply(c[Math.random()*c.length|0]);after()},450)}draw()};
-const draw=()=>{const tg=sel?mvs.filter(m=>m.from[0]===sel[0]&&m.from[1]===sel[1]).map(m=>m.path[m.path.length-1]):[];let o=`<p><button data-a="m1" class="${mode===1?"on":""}">vs computer</button> <button data-a="m2" class="${mode===2?"on":""}">2 players</button></p><div style="display:inline-grid;grid-template-columns:repeat(8,52px)">`;
+const note=()=>{h.msg((turn>0?"Red":"Black")+" to move"+(mvs[0]&&mvs[0].caps.length?" (capture required)":""))};
+const after=()=>{turn=-turn;sel=null;mvs=legal(turn);if(!mvs.length){over=1;const w=turn>0?"Black":"Red";h.msg(w+" wins!");if(w==="Red"&&mode===1)h.score(1)}else{note();if(mode===1&&turn===-1)h.after(()=>{const m=mvs,mx=Math.max(...m.map(x=>x.caps.length)),c=m.filter(x=>x.caps.length===mx);apply(c[Math.random()*c.length|0]);after()},450)}draw()};
+const draw=()=>{const tg=sel?mvs.filter(m=>m.from[0]===sel[0]&&m.from[1]===sel[1]).map(m=>m.path[m.path.length-1]):[];let o=`<p><button data-a="m1" class="${mode===1?"on":""}">vs computer</button> <button data-a="m2" class="${mode===2?"on":""}">2 players</button></p><div style="display:inline-grid;grid-template-columns:repeat(8,56px)">`;
 for(let r=0;r<8;r++)for(let c=0;c<8;c++){const v=b[r][c],dk=(r+c)%2,s=sel&&sel[0]===r&&sel[1]===c,t=tg.some(x=>x[0]===r&&x[1]===c);
-o+=`<button data-r="${r}" data-c="${c}" style="width:52px;height:52px;padding:0;font-size:28px;border:${s?"2px solid #c6ff2e":"1px solid #222"};background:${t?"#4b6212":dk?"#3a3a3a":"#8a8a8a"};color:${v>0?"#e55":"#ddd"}" ${dk?"":"disabled"}>${v?(Math.abs(v)===2?"♚":"●"):""}</button>`}el.innerHTML=o+"</div>"};
+o+=`<button data-r="${r}" data-c="${c}" aria-label="square" style="width:56px;height:56px;padding:0;border:${s?"3px solid #c6ff2e":"0"};border-radius:0;background:${t?"#6f8f1a":dk?"#4a3426":"#e4d6b4"}" ${dk?"":"disabled"}>${v?`<span style="display:block;margin:auto;width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 35% 30%,${v>0?"#ff8a8a,#c0392b 60%,#8e1f14":"#777,#2a2a2a 60%,#0d0d0d"});box-shadow:0 3px 0 ${v>0?"#5e140c":"#000"},inset 0 0 0 4px rgba(255,255,255,.16);color:#ffd84a;font-size:22px;line-height:42px">${Math.abs(v)===2?"♛":""}</span>`:""}</button>`}el.innerHTML=o+"</div>"};
 h.on(el,"click",e=>{const B=e.target.closest("button");if(!B)return;const D=B.dataset;if(D.a){mode=D.a==="m1"?1:2;init();draw();return}if(over||(mode===1&&turn===-1))return;
 const r=+D.r,c=+D.c;const m=sel&&mvs.find(x=>x.from[0]===sel[0]&&x.from[1]===sel[1]&&x.path[x.path.length-1][0]===r&&x.path[x.path.length-1][1]===c);
 if(m){apply(m);after();return}if(b[r][c]*turn>0&&mvs.some(x=>x.from[0]===r&&x.from[1]===c))sel=[r,c];else sel=null;draw()});init();draw()};
@@ -401,10 +418,10 @@ const fits=(g,r,c,n,hz)=>{for(let i=0;i<n;i++){const x=r+(hz?0:i),y=c+(hz?i:0);i
 const put=(g,r,c,n,hz,id)=>{for(let i=0;i<n;i++)g[r+(hz?0:i)][c+(hz?i:0)]=id};
 const rnd=()=>{F[p]=mk();for(let i=0;i<5;i++){let r,c,z;do{r=Math.random()*10|0;c=Math.random()*10|0;z=Math.random()<.5}while(!fits(F[p],r,c,SZ[i],z));put(F[p],r,c,SZ[i],z,i+1)}k=5};
 const grid=fn=>{let o=`<div style="display:inline-grid;grid-template-columns:repeat(10,34px);gap:1px">`;for(let r=0;r<10;r++)for(let c=0;c<10;c++)o+=fn(r,c);return o+"</div>"};
-const cell=(r,c,t,bg,on)=>`<button data-r="${r}" data-c="${c}" style="width:34px;height:34px;padding:0;background:${bg}" ${on?"":"disabled"}>${t}</button>`;
+const shipc=(r,c)=>{const id=F[p][r][c];if(!id)return cell(r,c,"","#2c2c2c",k<5);const q=(a,b)=>a>=0&&a<10&&b>=0&&b<10&&F[p][a][b]===id,L=q(r,c-1),R=q(r,c+1),U=q(r-1,c),D=q(r+1,c),hz=L||R,rad=hz?`${L?3:17}px ${R?3:17}px ${R?3:17}px ${L?3:17}px`:`${U?3:17}px ${U?3:17}px ${D?3:17}px ${D?3:17}px`;return`<button data-r="${r}" data-c="${c}" style="width:34px;height:34px;padding:0;border:0;border-radius:${rad};background:linear-gradient(${hz?"180deg":"90deg"},#b4bcc3,#59626a);color:#1d2328;font-size:12px;box-shadow:inset 0 0 0 1px #333" ${k<5?"":"disabled"}>${(L&&R)||(U&&D)?"◦":""}</button>`};const cell=(r,c,t,bg,on)=>`<button data-r="${r}" data-c="${c}" style="width:34px;height:34px;padding:0;background:${bg}" ${on?"":"disabled"}>${t}</button>`;
 const draw=()=>{let o="";
 if(ph==="pp")o=`<h2>Pass the device to Player ${p+1}</h2><button class="p" data-a="go">Ready to place my fleet</button>`;
-else if(ph==="pl")o=`<h3>Player ${p+1}: ${k<5?`place ${NM[k]} (${SZ[k]})`:"fleet ready"}</h3><p><button data-a="rot">Orientation: ${hz?"horizontal":"vertical"}</button> <button data-a="rnd">Random</button> <button data-a="clr">Clear</button> <button class="p" data-a="done" ${k<5?"disabled":""}>Done</button></p>`+grid((r,c)=>cell(r,c,F[p][r][c]?"■":"","#2c2c2c",k<5));
+else if(ph==="pl")o=`<h3>Player ${p+1}: ${k<5?`place ${NM[k]} (${SZ[k]})`:"fleet ready"}</h3><p><button data-a="rot">Orientation: ${hz?"horizontal":"vertical"}</button> <button data-a="rnd">Random</button> <button data-a="clr">Clear</button> <button class="p" data-a="done" ${k<5?"disabled":""}>Done</button></p>`+grid((r,c)=>shipc(r,c));
 else if(ph==="pb")o=`<h2>Pass the device to Player ${p+1}</h2><button class="p" data-a="go">Ready to fire</button>`;
 else if(ph==="fi"||ph==="ad")o=`<h3>Player ${p+1}: fire at the enemy fleet ${m?"· "+esc(m):""}</h3>`+grid((r,c)=>{const v=S[p][r][c];return cell(r,c,v===2?"✕":v===1?"•":"",v===2?"#7a2a2a":"#2c2c2c",ph==="fi"&&!v)})+(ph==="ad"?`<p><button class="p" data-a="end">End turn (hide screen)</button></p>`:"");
 else o=`<h2>Player ${p+1} wins in ${shots[p]} shots!</h2><button class="p" data-a="again">Play again</button>`;el.innerHTML=o};
@@ -427,28 +444,125 @@ const place=(r,c)=>{b[r][c]=t;last=[r,c];if(wins(r,c,t)){over=1;h.msg((t===1?"Li
 const ai=()=>{let best=[],bs=-1;if(!b.flat().some(x=>x)){return place(7,7)}for(let r=0;r<N;r++)for(let c=0;c<N;c++){if(b[r][c])continue;let near=false;for(let x=r-2;x<=r+2&&!near;x++)for(let y=c-2;y<=c+2;y++)if(IN(x,y)&&b[x][y]){near=true;break}if(!near)continue;const s=line(r,c,2)+line(r,c,1)*.95;if(s>bs){bs=s;best=[[r,c]]}else if(s===bs)best.push([r,c])}const m=best[Math.random()*best.length|0]||[7,7];place(m[0],m[1])};
 const draw=()=>{let o=mb(mode)+`<div style="display:inline-grid;grid-template-columns:repeat(15,32px);gap:1px">`;for(let r=0;r<N;r++)for(let c=0;c<N;c++){const v=b[r][c],L=last&&last[0]===r&&last[1]===c;o+=`<button data-r="${r}" data-c="${c}" style="width:32px;height:32px;padding:0;font-size:20px;background:${L?"#3d4a14":"#2a2a2a"};color:${v===1?"#c6ff2e":"#eee"}">${v?"●":""}</button>`}el.innerHTML=o+"</div>"};
 h.on(el,"click",e=>{const B=e.target.closest("button");if(!B)return;const D=B.dataset;if(D.a){mode=D.a==="m1"?1:2;init();draw();return}if(over||(mode===1&&t===2))return;const r=+D.r,c=+D.c;if(!b[r][c])place(r,c)});init();draw()};
+const dieHTML=n=>{const P={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n]||[];return`<span style="display:inline-grid;grid-template-columns:repeat(3,12px);gap:4px;padding:8px;background:#f2f2f2;border-radius:10px;vertical-align:middle;box-shadow:0 3px 0 #999">${[...Array(9).keys()].map(i=>`<i style="width:12px;height:12px;border-radius:50%;background:${P.includes(i)?"#111":"transparent"}"></i>`).join("")}</span>`};
+// 015 Chess
+info["015"]="Full chess rules: legal moves only, check, checkmate, stalemate, castling, en passant, promotion (you choose the piece), plus draws by the 50-move rule, threefold repetition and insufficient material. Click a piece to see its legal squares (dots; rings = captures), then click a destination. Play the computer (searches 3 plies) or a second local player; Undo, Flip and move history are in the side panel.";
+IMPL["015"]=(el,h)=>{const Z=64,GL={K:"♚",Q:"♛",R:"♜",B:"♝",N:"♞",P:"♟"},VAL={P:100,N:320,B:330,R:500,Q:900,K:0};
+const KN=[[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]],KG=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]],RD=KG.slice(0,4),BD=KG.slice(4),IN=(r,c)=>r>=0&&r<8&&c>=0&&c<8;
+const start=()=>{const b=Array(64).fill(null),k="RNBQKBNR";for(let c=0;c<8;c++){b[c]="b"+k[c];b[8+c]="bP";b[48+c]="wP";b[56+c]="w"+k[c]}return{b,turn:"w",cs:{wK:1,wQ:1,bK:1,bQ:1},ep:-1,half:0,full:1}};
+const att=(b,s,by)=>{const r=s>>3,c=s&7,pr=by==="w"?r+1:r-1;for(const dc of[-1,1])if(IN(pr,c+dc)&&b[pr*8+c+dc]===by+"P")return true;
+for(const[dr,dc]of KN)if(IN(r+dr,c+dc)&&b[(r+dr)*8+c+dc]===by+"N")return true;for(const[dr,dc]of KG)if(IN(r+dr,c+dc)&&b[(r+dr)*8+c+dc]===by+"K")return true;
+for(const[ds,ps]of[[RD,"RQ"],[BD,"BQ"]])for(const[dr,dc]of ds){let y=r+dr,x=c+dc;while(IN(y,x)){const q=b[y*8+x];if(q){if(q[0]===by&&ps.includes(q[1]))return true;break}y+=dr;x+=dc}}return false};
+const inChk=(b,col)=>att(b,b.indexOf(col+"K"),col==="w"?"b":"w");
+const gen=st=>{const{b,turn:T,cs,ep}=st,E=T==="w"?"b":"w",M=[],add=(f,t,x)=>M.push({f,t,...x});
+for(let s=0;s<64;s++){const p=b[s];if(!p||p[0]!==T)continue;const r=s>>3,c=s&7,k=p[1];
+if(k==="P"){const d=T==="w"?-1:1,sr=T==="w"?6:1,pr=T==="w"?0:7,push=t=>{if(t>>3===pr)for(const q of"QRBN")add(s,t,{pr:q});else add(s,t,{})};const f1=(r+d)*8+c;
+if(IN(r+d,c)&&!b[f1]){push(f1);if(r===sr&&!b[f1+d*8])add(s,f1+d*8,{dbl:1})}
+for(const dc of[-1,1]){if(!IN(r+d,c+dc))continue;const t=(r+d)*8+c+dc;if(b[t]&&b[t][0]===E)push(t);else if(t===ep)add(s,t,{epc:1})}}
+else if(k==="N"||k==="K"){for(const[dr,dc]of k==="N"?KN:KG){if(!IN(r+dr,c+dc))continue;const t=(r+dr)*8+c+dc;if(!b[t]||b[t][0]===E)add(s,t,{})}
+if(k==="K"&&s===(T==="w"?60:4)&&!att(b,s,E)){if(cs[T+"K"]&&!b[s+1]&&!b[s+2]&&b[s+3]===T+"R"&&!att(b,s+1,E)&&!att(b,s+2,E))add(s,s+2,{cas:1});if(cs[T+"Q"]&&!b[s-1]&&!b[s-2]&&!b[s-3]&&b[s-4]===T+"R"&&!att(b,s-1,E)&&!att(b,s-2,E))add(s,s-2,{cas:1})}}
+else for(const[dr,dc]of k==="R"?RD:k==="B"?BD:KG){let y=r+dr,x=c+dc;while(IN(y,x)){const t=y*8+x;if(!b[t])add(s,t,{});else{if(b[t][0]===E)add(s,t,{});break}y+=dr;x+=dc}}}return M};
+const apply=(st,m)=>{const b=st.b.slice(),p=b[m.f],T=st.turn,cs={...st.cs};let cap=b[m.t];if(m.epc){const q=m.t+(T==="w"?8:-8);cap=b[q];b[q]=null}
+b[m.t]=m.pr?T+m.pr:p;b[m.f]=null;if(m.cas){if(m.t>m.f){b[m.f+1]=b[m.f+3];b[m.f+3]=null}else{b[m.f-1]=b[m.f-4];b[m.f-4]=null}}
+if(p[1]==="K")cs[T+"K"]=cs[T+"Q"]=0;for(const q of[m.f,m.t]){if(q===63)cs.wK=0;if(q===56)cs.wQ=0;if(q===7)cs.bK=0;if(q===0)cs.bQ=0}
+return{b,turn:T==="w"?"b":"w",cs,ep:m.dbl?(m.f+m.t)/2:-1,half:p[1]==="P"||cap?0:st.half+1,full:st.full+(T==="b"?1:0)}};
+const legal=st=>gen(st).filter(m=>!inChk(apply(st,m).b,st.turn));
+const key=st=>st.b.map(x=>x||"-").join("")+st.turn+Object.values(st.cs).join("")+st.ep;
+const nm=s=>"abcdefgh"[s&7]+(8-(s>>3));
+const san=(st,m,L)=>{const p=st.b[m.f],k=p[1],cap=st.b[m.t]||m.epc;let t;if(m.cas)t=m.t>m.f?"O-O":"O-O-O";else if(k==="P")t=(cap?"abcdefgh"[m.f&7]+"x":"")+nm(m.t)+(m.pr?"="+m.pr:"");
+else{const o=L.filter(x=>x!==m&&st.b[x.f]===p&&x.t===m.t);let d="";if(o.length)d=o.every(x=>(x.f&7)!==(m.f&7))?"abcdefgh"[m.f&7]:o.every(x=>(x.f>>3)!==(m.f>>3))?String(8-(m.f>>3)):nm(m.f);t=k+d+(cap?"x":"")+nm(m.t)}
+const n=apply(st,m);return t+(inChk(n.b,n.turn)?(legal(n).length?"+":"#"):"")};
+const ev=st=>{let s=0;st.b.forEach((p,i)=>{if(!p)return;const r=i>>3,c=i&7,k=p[1],ct=7-Math.abs(2*r-7)/1-Math.abs(2*c-7)/1,pos=k==="P"?(p[0]==="w"?6-r:r-1)*6+ct:k==="N"||k==="B"?ct*4:k==="Q"?ct:0;s+=(p[0]==="w"?1:-1)*(VAL[k]+pos)});return s};
+const ord=(st,M)=>M.map(m=>[(st.b[m.t]?VAL[st.b[m.t][1]]*10-VAL[st.b[m.f][1]]:0)+(m.pr?800:0),m]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+const nmx=(st,d,a,be,ply)=>{if(d===0)return(st.turn==="w"?1:-1)*ev(st);const M=legal(st);if(!M.length)return inChk(st.b,st.turn)?-1e5+ply:0;let best=-1e9;for(const m of ord(st,M)){const sc=-nmx(apply(st,m),d-1,-be,-a,ply+1);if(sc>best)best=sc;if(best>a)a=best;if(a>=be)break}return best};
+const pick=()=>{let bm=null,bs=-1e9;for(const m of ord(st,L)){const sc=-nmx(apply(st,m),2,-1e9,1e9,1)+Math.random()*4;if(sc>bs){bs=sc;bm=m}}return bm};
+let st,L,hist,sans,last,sel=-1,pend=null,over=0,mode=1,human="w",flip=0,reps;
+const wrap=document.createElement("div"),cv=document.createElement("canvas"),pn=document.createElement("div");wrap.style.cssText="display:flex;gap:16px;justify-content:center;flex-wrap:wrap";cv.width=cv.height=8*Z;cv.style.cssText="max-width:100%;height:auto";pn.style.cssText="width:230px;text-align:left";wrap.append(cv,pn);el.appendChild(wrap);const x=cv.getContext("2d");
+const vw=s=>flip?63-s:s;
+const result=()=>{const E=st.turn==="w"?"Black":"White";if(!L.length)return inChk(st.b,st.turn)?`Checkmate – ${E} wins!`:"Stalemate – draw.";if(st.half>=100)return"Draw by the 50-move rule.";if(reps[key(st)]>=3)return"Draw by threefold repetition.";
+const pcs=st.b.filter(p=>p&&p[1]!=="K");if(!pcs.length||(pcs.length===1&&"BN".includes(pcs[0][1])))return"Draw by insufficient material.";return""};
+const status=()=>{const r=result();if(r){over=1;h.msg(r);const win=/wins/.test(r)&&r.includes(human==="w"?"White":"Black");if(win&&mode===1)h.score(st.full,true)}else h.msg(`${st.turn==="w"?"White":"Black"} to move${inChk(st.b,st.turn)?" – check!":""}`)};
+const sched=()=>{if(!over&&mode===1&&st.turn!==human)h.after(()=>{if(over||st.turn===human)return;const m=pick();if(m)play(m)},80)};
+const play=m=>{sans.push(san(st,m,L));st=apply(st,m);hist.push(st);last=[m.f,m.t];sel=-1;pend=null;L=legal(st);const k=key(st);reps[k]=(reps[k]||0)+1;status();draw();sched()};
+const rebuild=()=>{st=hist[hist.length-1];L=legal(st);reps={};hist.forEach(s=>{const k=key(s);reps[k]=(reps[k]||0)+1});over=0;sel=-1;pend=null;status()};
+const nw=()=>{st=start();hist=[st];sans=[];last=null;flip=mode===1&&human==="b"?1:0;rebuild();draw();sched()};
+const draw=()=>{const tg=sel>=0?L.filter(m=>m.f===sel).map(m=>m.t):[],ks=inChk(st.b,st.turn)?st.b.indexOf(st.turn+"K"):-1;x.textAlign="center";x.textBaseline="middle";
+for(let v=0;v<64;v++){const s=vw(v),vr=v>>3,vc=v&7,X=vc*Z,Y=vr*Z;x.fillStyle=(vr+vc)%2?"#6f6f66":"#cfcfc2";x.fillRect(X,Y,Z,Z);
+if(last&&(s===last[0]||s===last[1])){x.fillStyle="rgba(198,255,46,.30)";x.fillRect(X,Y,Z,Z)}if(s===sel){x.fillStyle="rgba(198,255,46,.55)";x.fillRect(X,Y,Z,Z)}
+if(s===ks){const g=x.createRadialGradient(X+Z/2,Y+Z/2,4,X+Z/2,Y+Z/2,Z/1.6);g.addColorStop(0,"rgba(230,50,50,.9)");g.addColorStop(1,"rgba(230,50,50,0)");x.fillStyle=g;x.fillRect(X,Y,Z,Z)}
+x.font="11px sans-serif";x.fillStyle=(vr+vc)%2?"#cfcfc2":"#6f6f66";x.textAlign="left";x.textBaseline="top";if(vc===0)x.fillText(8-(s>>3),X+3,Y+3);x.textAlign="right";x.textBaseline="bottom";if(vr===7)x.fillText("abcdefgh"[s&7],X+Z-3,Y+Z-2);x.textAlign="center";x.textBaseline="middle"}
+for(let v=0;v<64;v++){const s=vw(v),p=st.b[s],X=(v&7)*Z+Z/2,Y=(v>>3)*Z+Z/2;
+if(p){x.font=`${Z*.8}px "Segoe UI Symbol","DejaVu Sans","Arial Unicode MS",serif`;x.lineWidth=2;x.strokeStyle=p[0]==="w"?"#111":"#d8d8d0";x.fillStyle=p[0]==="w"?"#fafaf5":"#161616";const g=GL[p[1]]+"\uFE0E";x.strokeText(g,X,Y+3);x.fillText(g,X,Y+3)}
+if(tg.includes(s)){x.beginPath();if(p){x.arc(X,Y,Z/2-5,0,7);x.lineWidth=4;x.strokeStyle="rgba(198,255,46,.9)";x.stroke()}else{x.arc(X,Y,9,0,7);x.fillStyle="rgba(198,255,46,.9)";x.fill()}}}
+let hs="";for(let i=0;i<sans.length;i+=2)hs+=`<div>${i/2+1}. ${esc(sans[i])} ${esc(sans[i+1]||"")}</div>`;
+const cnt=(c)=>{const S={P:8,N:2,B:2,R:2,Q:1};let o="";for(const k of"QRBNP"){const n=Math.max(0,S[k]-st.b.filter(p=>p===c+k).length);o+=GL[k].repeat(n)+"\uFE0E"}return o};
+pn.innerHTML=`<p><button data-a="m1" class="${mode===1?"on":""}">vs computer</button> <button data-a="m2" class="${mode===2?"on":""}">2 players</button></p>`+(mode===1?`<p>You play: <button data-a="hw" class="${human==="w"?"on":""}">White</button> <button data-a="hb" class="${human==="b"?"on":""}">Black</button></p>`:"")
++`<p><button data-a="undo">Undo</button> <button data-a="flip">Flip</button> <button data-a="new">New game</button></p>`
++(pend?`<p>Promote to: ${pend.map(m=>`<button data-pr="${m.pr}" style="font-size:22px">${GL[m.pr]}\uFE0E</button>`).join(" ")}</p>`:"")
++`<p style="color:#999;margin:4px 0">Captured by White: <span style="font-size:18px;color:#eee">${cnt("b")||"–"}</span><br>Captured by Black: <span style="font-size:18px;color:#eee">${cnt("w")||"–"}</span></p><div style="max-height:200px;overflow:auto;background:#222;padding:6px;font:13px monospace">${hs||"No moves yet"}</div>`};
+h.on(cv,"click",e=>{if(over||pend||(mode===1&&st.turn!==human))return;const rc=cv.getBoundingClientRect(),k=cv.width/rc.width,vc=Math.floor((e.clientX-rc.left)*k/Z),vr=Math.floor((e.clientY-rc.top)*k/Z),s=vw(vr*8+vc);
+const mv=sel>=0?L.filter(m=>m.f===sel&&m.t===s):[];if(mv.length){if(mv[0].pr){pend=mv;draw()}else play(mv[0]);return}
+sel=st.b[s]&&st.b[s][0]===st.turn&&L.some(m=>m.f===s)?s:-1;draw()});
+h.on(pn,"click",e=>{const B=e.target.closest("button");if(!B)return;const D=B.dataset;
+if(D.pr){const m=pend.find(q=>q.pr===D.pr);pend=null;play(m);return}
+if(D.a==="m1"||D.a==="m2"){mode=D.a==="m1"?1:2;nw()}else if(D.a==="hw"||D.a==="hb"){human=D.a==="hw"?"w":"b";nw()}else if(D.a==="new")nw();else if(D.a==="flip"){flip=1-flip;draw()}
+else if(D.a==="undo"){const n=mode===1&&st.turn===human?2:1;if(hist.length>n){hist.length-=n;sans.length-=n;last=null;rebuild();draw()}}});nw()};
+
+Object.assign(info,{"001":"Everyone secretly sees the word, except the imposter, who gets a hint. Give one clue each, then vote out the imposter.","002":"Everyone votes for who fits the prompt best. The most votes scores a point.","005":"Act out the word without speaking. Your team guesses. Tap Correct or Skip.","006":"Describe the word without saying it. Tap Correct or Skip. 60 seconds.","007":"Write two truths and one lie. Everyone else votes for the lie.","008":"Say a word related to the last one before the timer ends. No repeats.","009":"Fill in each category with a word that starts with the letter.","010":"One player picks the word. Others ask yes/no questions and guess.","011":"Mafia eliminates villagers at night. Everyone votes by day to find the Mafia.","012":"Roll the dice and race your four tokens home. A 6 lets you out and gives another roll.","013":"Roll and race to 100. Ladders go up, snakes go down.","014":"Jump opponent pieces when you can (it's required). Reach the far row to make a king.","015":"Checkmate the other king. Click a piece, then a highlighted square.","016":"Get three in a row.","017":"Drop discs and connect four.","018":"Trap the other colour between yours to flip it. Most discs wins.","019":"Draw lines to close boxes. Close a box to go again.","020":"Pick a pit to sow seeds. End in your store to go again. Most seeds wins.","021":"Place your ships, then take turns firing. Sink every enemy ship to win.","022":"Get five in a row.","030":"Flip two cards to find matching pairs.","037":"Slide tiles with the arrow keys. Equal numbers merge. Reach 2048.","043":"Guess the hidden colour code. ● = right spot, ○ = wrong spot.","045":"Eat apples to grow. Don't hit the walls or yourself. Space pauses.","054":"Whack the mole when it pops up. Misses cost points.","055":"Click as soon as the box turns lime.","069":"Answer as many sums as you can in 30 seconds.","072":"Guess the word one letter at a time. Six mistakes and you lose."});
 // ---------- shell ----------
-let cleanups=[],cur=null,favs=S.get("fav",[]),rec=S.get("rec",[]);
+const slug=t=>t.toLowerCase().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+GAMES.forEach(g=>g.slug=slug(g.title));
+const HID=new Set(["003","004","044","063"]),SOLO=new Set(["014","015","016","017","018","019","020","022","030","037","043","045","054","055","069","072"]),ALONE=new Set(["030","037","043","045","054","055","069","072"]);
+const vis=()=>GAMES.filter(g=>IMPL[g.id]&&!HID.has(g.id));
+const vib=p=>{if(S.get("vib",true)&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}};
+let cleanups=[],cur=null,favs=S.get("fav",[]),rec=S.get("rec",[]),cat=-1,view="home";const F={q:"",c:-1,solo:0,grp:0,fav:0};
 const h={on(t,e,f,o){t.addEventListener(e,f,o);cleanups.push(()=>t.removeEventListener(e,f,o))},every(f,ms){const i=setInterval(f,ms);cleanups.push(()=>clearInterval(i));return i},after(f,ms){const i=setTimeout(f,ms);cleanups.push(()=>clearTimeout(i));return i},msg(s){$("#msg").textContent=s},
-score(n,low){const k="hs_"+cur,b=S.get(k,null);if(b===null||(low?n<b:n>b)){S.set(k,n)}showBest()}};
+score(n,low){const k="hs_"+cur,b=S.get(k,null);if(b===null||(low?n<b:n>b))S.set(k,n);showBest()}};
 const showBest=()=>{const b=S.get("hs_"+cur,null);$("#best").textContent=b===null?"":"Best: "+b};
-function launch(id){const g=GAMES.find(x=>x.id===id);if(!IMPL[id])return;exit(true);cur=id;rec=[id,...rec.filter(x=>x!==id)].slice(0,8);S.set("rec",rec);
-$("#home").style.display="none";$("#gv").style.display="block";$("#gt").textContent=id+" · "+g.title;$("#gi").textContent=info[id];showBest();start()}
-function start(){cleanups.forEach(f=>f());cleanups=[];const p=$("#play");p.innerHTML="";h.msg("");IMPL[cur](p,h)}
-function exit(quiet){cleanups.forEach(f=>f());cleanups=[];$("#play").innerHTML="";cur=null;$("#gv").style.display="none";$("#home").style.display="block";if(!quiet)render()}
-$("#rs").onclick=start;$("#ex").onclick=()=>exit();
-let cat=-1,showFav=false;
 function thumb(id){let s=+id*2654435761%4294967296,r=()=>(s=(s*1103515245+12345)%2147483648)/2147483648,o="";for(let i=0;i<9;i++)o+=`<rect x="${r()*170|0}" y="${r()*60|0}" width="${10+r()*40|0}" height="${6+r()*20|0}" fill="${r()<.25?"#c6ff2e":"#555"}"/>`;return`<svg viewBox="0 0 200 80" aria-hidden="true"><rect width="200" height="80" fill="#1a1a1a"/>${o}</svg>`}
-function card(g){const d=document.createElement("div"),ok=!!IMPL[g.id];d.className="card"+(ok?"":" x");d.innerHTML=thumb(g.id)+`<div><small>${g.id} · ${CATS[g.cat]}</small><br><b></b><div class="r"></div></div>`;d.querySelector("b").textContent=g.title;const r=d.querySelector(".r");
-const p=document.createElement("button");p.textContent=ok?"Play":"Not built yet";p.className=ok?"p":"";p.disabled=!ok;p.onclick=()=>launch(g.id);const f=document.createElement("button");f.textContent=favs.includes(g.id)?"★":"☆";f.setAttribute("aria-label","Favourite");f.onclick=()=>{favs=favs.includes(g.id)?favs.filter(x=>x!==g.id):[...favs,g.id];S.set("fav",favs);render()};r.append(p,f);return d}
-function render(){const q=$("#q").value.trim().toLowerCase();const list=GAMES.filter(g=>(cat<0||g.cat===cat)&&(!showFav||favs.includes(g.id))&&(!q||g.id.includes(q)||g.title.toLowerCase().includes(q)||CATS[g.cat].toLowerCase().includes(q)));
-const c=$("#cat");c.innerHTML="";list.forEach(g=>c.appendChild(card(g)));$("#ch").textContent=`Catalogue — ${list.length} shown · ${Object.keys(IMPL).length} of 99 playable`;
-const mk=(el,t,ids)=>{el.innerHTML="";if(!ids.length)return;const hd=document.createElement("h2");hd.textContent=t;const gr=document.createElement("div");gr.className="grid";ids.forEach(i=>gr.appendChild(card(GAMES[+i-1])));el.append(hd,gr)};mk($("#rec"),"Recently played",rec);mk($("#fav"),"Favourites",favs);
-const ch=$("#chips");ch.innerHTML="";[["All",-1],...CATS.map((c,i)=>[c,i]),["★ Favourites","f"]].forEach(([n,v])=>{const b=document.createElement("button");b.textContent=n;if(v==="f"?showFav:(!showFav&&v===cat))b.className="on";b.onclick=()=>{if(v==="f")showFav=!showFav;else{cat=v;showFav=false}render()};ch.appendChild(b)})}
-$("#q").oninput=render;
-const playable=()=>GAMES.filter(g=>IMPL[g.id]);
-$("#rnd").onclick=()=>{const p=playable();launch(p[Math.random()*p.length|0].id)};
-$("#dly").onclick=()=>{const d=new Date(),k=d.getFullYear()*372+d.getMonth()*31+d.getDate(),p=playable(),g=p[k%p.length];alert("Daily challenge: "+g.title+"\nBeat your best score today!");launch(g.id)};
-$("#set").onclick=()=>{if(confirm("Clear ALL saved favourites, recents and high scores?")){try{Object.keys(localStorage).filter(k=>k.startsWith("99o_")).forEach(k=>localStorage.removeItem(k))}catch(e){}favs=[];rec=[];render()}};
-const net=()=>{const s=$("#st");s.className=navigator.onLine?"o":"";s.lastChild.textContent=navigator.onLine?"Online (works offline too)":"Offline mode"};addEventListener("online",net);addEventListener("offline",net);net();render();
+const go=p=>{if(location.hash==="#"+p)route();else location.hash=p};
+function card(g){const d=document.createElement("div");d.className="card";d.innerHTML=thumb(g.id)+`<div><small>${CATS[g.cat]}</small><br><b></b><div class="r"></div></div>`;d.querySelector("b").textContent=g.title;const r=d.querySelector(".r"),p=document.createElement("button"),on=favs.includes(g.id),f=document.createElement("button");
+p.textContent="Play";p.className="p";p.onclick=()=>go("/game/"+g.slug);f.textContent=on?"★":"☆";f.title=on?"Remove favourite":"Add favourite";f.setAttribute("aria-pressed",on);f.onclick=()=>{favs=on?favs.filter(x=>x!==g.id):[...favs,g.id];S.set("fav",favs);paint()};r.append(p,f);return d}
+const grid=(el,list)=>{el.innerHTML="";list.forEach(g=>el.appendChild(card(g)))};
+function renderHome(){const V=vis(),used=[...new Set(V.map(g=>g.cat))].sort(),ch=$("#chips");ch.innerHTML="";[[-1,"All"],...used.map(c=>[c,CATS[c]])].forEach(([v,n])=>{const b=document.createElement("button");b.textContent=n;if(cat===v)b.className="on";b.onclick=()=>{cat=v;renderHome()};ch.appendChild(b)});
+const list=V.filter(g=>cat<0||g.cat===cat);$("#ch").textContent=(cat<0?"All games":CATS[cat])+` (${list.length})`;grid($("#cat"),list);
+const rc=$("#rec");rc.innerHTML="";const R=rec.map(i=>V.find(g=>g.id===i)).filter(Boolean);if(R.length&&S.get("showRec",true)){rc.innerHTML="<h2>Recently played</h2><div class='grid'></div>";grid(rc.lastChild,R)}}
+function renderFav(){const V=vis(),L=favs.map(i=>V.find(g=>g.id===i)).filter(Boolean);grid($("#favg"),L);$("#favn").textContent=L.length?"":"No favourites yet. Tap ☆ on any game to add it here."}
+function renderSearch(){const V=vis(),used=[...new Set(V.map(g=>g.cat))].sort(),sf=$("#sf");sf.innerHTML="";const chip=(n,on,fn)=>{const b=document.createElement("button");b.textContent=n;if(on)b.className="on";b.onclick=()=>{fn();renderSearch()};sf.appendChild(b)};
+chip("All",F.c<0,()=>F.c=-1);used.forEach(c=>chip(CATS[c],F.c===c,()=>F.c=c));chip("Solo",F.solo,()=>{F.solo=!F.solo;if(F.solo)F.grp=0});chip("With friends",F.grp,()=>{F.grp=!F.grp;if(F.grp)F.solo=0});chip("★ Favourites",F.fav,()=>F.fav=!F.fav);
+const q=F.q.trim().toLowerCase(),L=V.filter(g=>(F.c<0||g.cat===F.c)&&(!F.solo||SOLO.has(g.id))&&(!F.grp||!ALONE.has(g.id))&&(!F.fav||favs.includes(g.id))&&(!q||g.title.toLowerCase().includes(q)||g.id.includes(q)||g.slug.includes(q)||CATS[g.cat].toLowerCase().includes(q)));
+$("#sn").textContent=L.length?`${L.length} game${L.length>1?"s":""}`:"No games match";grid($("#sr"),L)}
+function teardown(){cleanups.forEach(f=>f());cleanups=[];$("#play").innerHTML="";cur=null}
+function start(){cleanups.forEach(f=>f());cleanups=[];const p=$("#play");p.innerHTML="";h.msg("");p.style.cursor="";IMPL[cur](p,h)}
+function launch(id){const g=GAMES.find(x=>x.id===id);cur=id;rec=[id,...rec.filter(x=>x!==id)].slice(0,8);S.set("rec",rec);$("#gt").textContent=g.title;$("#gi").textContent=info[id]||"";showBest();start()}
+const paint=()=>{if(view==="home")renderHome();else if(view==="fav")renderFav();else if(view==="search")renderSearch()};
+function route(){const p=location.hash.slice(1)||"/";teardown();$("#dr").style.display="none";let v="home";
+if(p.startsWith("/game/")){const g=vis().find(x=>x.slug===p.slice(6));if(g)v="game";else{location.hash="/";return}}else if(p==="/favourites")v="fav";else if(p==="/search")v="search";
+S.set("last",p);view=v;[["home","home"],["fav","favv"],["search","sp"],["game","gv"]].forEach(([k,id])=>$("#"+id).style.display=k===v?"block":"none");
+if(v==="game")launch(vis().find(x=>x.slug===p.slice(6)).id);else{paint();if(v==="search")setTimeout(()=>$("#sq").focus(),0);else $("#q").blur()}window.scrollTo(0,0)}
+addEventListener("hashchange",route);
+const pickGo=g=>go("/game/"+g.slug);
+$("#brand").onclick=()=>go("/");$("#brand").onkeydown=e=>{if(e.key==="Enter")go("/")};
+$("#q").onfocus=()=>go("/search");$("#sq").oninput=e=>{F.q=e.target.value;renderSearch()};$("#sback").onclick=()=>go("/");
+$("#favb").onclick=()=>go("/favourites");$("#rs").onclick=()=>start();$("#ex").onclick=()=>go("/");
+$("#rnd").onclick=()=>{const V=vis();pickGo(V[Math.random()*V.length|0])};
+$("#dly").onclick=()=>{const d=new Date(),k=d.getFullYear()*372+d.getMonth()*31+d.getDate(),V=vis(),g=V[k%V.length];alert("Daily challenge: "+g.title+"\nBeat your best score today!");pickGo(g)};
+$("#gv").addEventListener("click",e=>{if(e.target.closest("#play button"))vib(8)});
+addEventListener("keydown",e=>{if(e.key==="Escape"){if(view==="search")go("/");$("#dr").style.display="none"}});
+// settings drawer
+const dr=document.createElement("div");dr.id="dr";dr.innerHTML=`<h3 style="margin:0 0 6px">Settings</h3><label><input type="checkbox" data-k="vib"> Vibration &amp; haptics</label><label><input type="checkbox" data-k="showRec"> Show recently played</label><label><input type="checkbox" data-k="resume"> Reopen where I left off</label><hr style="border:0;border-top:1px solid #444"><button data-x="favs">Clear favourites</button><button data-x="scores">Clear high scores</button><button data-x="all">Reset everything</button><button data-x="close">Close</button>`;document.body.appendChild(dr);
+dr.querySelectorAll("input").forEach(i=>{i.checked=S.get(i.dataset.k,true);i.onchange=()=>{S.set(i.dataset.k,i.checked);if(i.dataset.k==="showRec")paint()}});
+const wipe=f=>{try{Object.keys(localStorage).filter(k=>k.startsWith("99o_")&&f(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}Object.keys(mem).filter(k=>f("99o_"+k)).forEach(k=>delete mem[k])};
+dr.onclick=e=>{const x=e.target.dataset&&e.target.dataset.x;if(!x)return;if(x==="close")dr.style.display="none";else if(x==="favs"){favs=[];S.set("fav",[]);paint()}else if(x==="scores")wipe(k=>k.startsWith("99o_hs_"));else if(x==="all"&&confirm("Reset favourites, recents, scores, players and settings?")){wipe(()=>true);location.hash="/";location.reload()}};
+$("#set").onclick=()=>{dr.style.display=dr.style.display==="block"?"none":"block"};
+// players & scores module
+let PL=S.get("pl",[]),pmOpen=S.get("pmOpen",false);const pm=document.createElement("div");pm.style.cssText="position:fixed;right:16px;bottom:0;width:310px;background:var(--sf);border:1px solid #444;border-bottom:0;border-radius:8px 8px 0 0;z-index:15";document.body.appendChild(pm);
+function renderPm(){const lead=Math.max(0,...PL.map(p=>p.pts));pm.innerHTML=`<button data-p="t" style="width:100%;border:0;border-radius:8px 8px 0 0;text-align:left">Players &amp; scores (${PL.length}) ${pmOpen?"▾":"▴"}</button>`+(pmOpen?`<div style="padding:8px;max-height:340px;overflow:auto">`+(PL.length?PL.map((p,i)=>`<div style="display:flex;gap:4px;align-items:center;margin-bottom:6px"><input data-n="${i}" value="${esc(p.name)}" style="min-width:0;flex:1" aria-label="Player name"><span style="width:14px">${p.pts===lead&&lead>0?"★":""}</span><b style="min-width:30px;text-align:center">${p.pts}</b><button data-p="+${i}">+1</button><button data-p="*${i}">+5</button><button data-p="-${i}">−1</button><button data-p="x${i}" aria-label="Remove player">✕</button></div>`).join(""):"<p style='color:#999;margin:4px 0 8px'>Add players to keep score across games.</p>")+`<div style="display:flex;gap:6px"><button data-p="add" class="p">Add player</button><button data-p="rs">Reset points</button></div></div>`:"")}
+pm.onclick=e=>{const v=e.target.closest("button")&&e.target.closest("button").dataset.p;if(!v)return;const i=+v.slice(1);
+if(v==="t"){pmOpen=!pmOpen;S.set("pmOpen",pmOpen)}else if(v==="add")PL.push({name:"Player "+(PL.length+1),pts:0});else if(v==="rs")PL.forEach(p=>p.pts=0);else if(v[0]==="+")PL[i].pts++;else if(v[0]==="*")PL[i].pts+=5;else if(v[0]==="-")PL[i].pts--;else if(v[0]==="x")PL.splice(i,1);
+S.set("pl",PL);renderPm()};
+pm.onchange=e=>{if(e.target.dataset.n!=null){PL[+e.target.dataset.n].name=e.target.value.trim()||"Player";S.set("pl",PL);renderPm()}};
+const net=()=>{const s=$("#st");s.className=navigator.onLine?"o":"";s.lastChild.textContent=navigator.onLine?"Online (works offline too)":"Offline mode"};addEventListener("online",net);addEventListener("offline",net);net();
+renderPm();
+if(!location.hash&&S.get("resume",true)&&S.get("last","/")!=="/")location.hash=S.get("last","/");else route();
 </script></body></html>
